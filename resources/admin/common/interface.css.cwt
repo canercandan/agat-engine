@@ -1,0 +1,10 @@
+/* Interface CSS generated for the website @toUpperString(getEnv("siteDomain"))@ */
+div{margin: auto; width: 500px}
+table{border: 2px dashed black; margin: 15px; padding: 5px; width: 100%}
+caption{font-weight: bold}
+th{border-bottom: 1px solid black}
+th, td{text-align: center}
+textarea{height: 250px; width: 400px}
+blockquote{text-align: center}
+.error{border: 2px dashed red}
+.notice{border: 2px dashed green}

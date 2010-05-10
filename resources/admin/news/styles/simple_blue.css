@@ -1,0 +1,81 @@
+.news {
+	position: relative;
+	width: 500px;
+}
+
+.formButton {
+	color: #1f409e;
+	border: thin solid #3e67db;
+	width: 150px;
+	margin-top: 1px;
+	cursor: pointer;
+}
+
+.formButton:hover {
+	color: #132764;
+	border: thin solid #1E40A4;
+}
+
+.news_separator {
+	position: relative;
+	width: 100%;
+	border-bottom: thin solid #3e67db;
+	color: #1f409e;
+}
+
+.news_separator table{
+	width: 100%;
+}
+
+.news_separator td{
+	vertical-align: middle;
+}
+
+.news_content{
+	width: 100%;
+}
+
+.news_content table{
+	width: 100%;
+}
+
+.news_content td {
+	vertical-align: top;
+	overflow: scroll;
+}
+
+.text_content {
+	overflow: scroll;
+}
+
+.news_right {
+	text-align: right;
+}
+
+.news_date {
+	width: 30px;
+}
+
+.news_year {
+	width: 60px;
+}
+
+.newsMenuContainer {
+	width: 100%;
+	text-align: center;
+}
+
+.newsMenu {
+	color: #1f409e;
+}
+
+.newsMenu td{
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.newsMenu font:hover{
+	cursor: pointer;
+	text-decoration: underline;
+}
+

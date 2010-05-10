@@ -1,0 +1,64 @@
+<chapter id="intro" lang="fr">
+  <title>Introduction</title>
+  <sect1>
+    <title>Qu'est ce que c'est ?</title>
+    <para>
+      Avec le developpement à grande echelle du web et la venu de nouvelles technologies autour de celle ci; il est tres difficile de suivre la tandance sans consulter un expert du metier; Celui qui sera adopter le langage AGAT sera se passer d'un specialiste; Le langage a été conçu pour des novices voulant développer rapidement un site web complet comme pour des experts souhaitant intégrer des concepts plus poussés. Il a été structuré de façon à organiser le travail souvent très désordonné de développement web; Trés facile à comprendre ce langage reprend le concept de balise et est donc tres familié aux webmasters utilisant déjà les langages de balises tel que le HTML.
+    </para>
+    <para>
+      Il est à noter que les mots clé composant le langage AGAT ont été choisit en Anglais; Il est important donc de prendre en compte les termes anglais cités dans ce manuel.
+    </para>
+  </sect1>
+  <sect1>
+    <title>Agat Engine</title>
+    <para>
+      Comme tout langage il est nécessaire d'avoir installé sur sa machine un compilateur; Le compilateur du langage AGAT est appelé "agatengine"; Le langage étant très riche en fonctionnalité, le compilateur peut générer tout type de site. Nous allons toute au long de la documentation donner des exemples de rendu genéré par le compilateur "agatengine".
+    </para>
+    <para>
+      Des frameworks comme "Koupix Editor" integrent directement le compilateur a leur solution afin de donner un aperçu du code AGAT produit par l'utilisateur.
+    </para>
+  </sect1>
+  <sect1>
+    <title>La structure AGAT</title>
+    <para>
+      Profitons de cette phase d'introduction pour parler de la structure employée par AGAT. Elle est composé de plusieurs parties:
+      <itemizedlist>
+	<listitem><para>l'entete aussi appelé "header",</para></listitem>
+	<listitem><para>les zones de mise en page aussi appelé "layout",</para></listitem>
+	<listitem><para>le remplicage des zones de mise en page "call-layout",</para></listitem>
+	<listitem><para>les sections "section"</para></listitem>
+	<listitem><para>et les zones d'insertion "write".</para></listitem>
+      </itemizedlist>
+    </para>
+    <sect2>
+      <title>Header</title>
+      <para>
+	Voici un exemple d'entete que l'on peut retrouver dans un projet en AGAT:
+      </para>
+      <para>
+	<code language="xml">
+	  &lt;header domain="mondomaine.tld" web="apache13" host="a.b.c.d" default_username="admin" default_password="admin"/>
+	</code>
+      </para>
+      <para>
+	Cette partie sera plus detaillé dans le chapitre suivant mais ce qu'il faut retenir c'est que la partie Header va permettre de definir plusieurs information utile pour le compilteur; Exemple: l'attribut web contenant la valeur "apache13", le compilateur lors de la phase de compilation du projet va générer en plus du site web des fichiers de configuration pour le serveur web apache (version 1.3) afin que le site web soit automatiquement hebergé dessus; D'autres serveurs web sont bien entendu pris en compte.
+      </para>
+    </sect2>
+    <sect2>
+      <title>Layout</title>
+      <para>...</para>
+    </sect2>
+    <sect2>
+      <title>Call-layout</title>
+      <para>...</para>
+    </sect2>
+    <sect2>
+      <title>Section</title>
+      <para>...</para>
+    </sect2>
+    <sect2>
+      <title>Write</title>
+      <para>...</para>
+    </sect2>
+  </sect1>
+</chapter>

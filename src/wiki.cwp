@@ -1,0 +1,153 @@
+#noCase
+#implicitCopy
+
+#ignore["WIKI"] ::= #explicitCopy ["<!--" ->"-->"]+;
+
+start ::=
+#ignore("WIKI")
+  => {@@"<div class=\"wiki\">\n"@@}
+  [WikiCode]+
+  => {@@"</div>\n"@@}
+#continue
+#empty
+;
+
+WikiCode ::=
+  [BOLD | ITALIC | UNDERLINE | MONOSPACE | SUBSCRIPT |
+   SUPERSCRIPT | DELETE | PARAGRAPH | NEWLINE |
+   EXTERNAL | LINK_SECTION |  LINK | EMAIL | IMAGE |
+   FOOTNOTE | HEADLINE1 | HEADLINE2 | HEADLINE3 |
+   HEADLINE4 | HEADLINE5 | UNORDER | ORDER | CODE |
+   VARIABLE | TEXT | EOL]
+  ;
+
+TEXT ::= [VARIABLE | #implicitCopy ~DELIM]+;
+
+DELIM ::= '<' | '>' | "**" | "//" | "__" | "''" | "\\\\" | "[[" | "]]" | "((" | "))" | "==" | "{{" | "}}" | EOL;
+
+BOLD ::= #explicitCopy ["**" => {@@"<strong>"@@}] #continue WikiCode #continue ["**" => {@@"</strong>"@@}];
+ITALIC ::= #explicitCopy ["//" => {@@"<em>"@@}] #continue WikiCode #continue ["//" => {@@"</em>"@@}];
+UNDERLINE ::= #explicitCopy ["__" => {@@"<em class=\"u\">"@@}] #continue WikiCode #continue ["__" => {@@"</em>"@@}];
+
+MONOSPACE ::= #explicitCopy ["''" => {@@"<code>"@@}] #continue WikiCode #continue ["''" => {@@"</code>"@@}];
+
+SUBSCRIPT ::= #explicitCopy "<sub>":sTag => {@@sTag@@} #continue [WikiCode]+ #continue "</sub>":sTag => {@@sTag@@};
+SUPERSCRIPT ::= #explicitCopy "<sup>":sTag => {@@sTag@@} #continue [WikiCode]+ #continue "</sup>":sTag => {@@sTag@@};
+
+DELETE ::= #explicitCopy "<del>":sTag => {@@sTag@@} #continue [WikiCode]+ #continue "</del>":sTag => {@@sTag@@};
+
+UNORDER ::= #explicitCopy "  " '*' => {@@"<ul>\n"@@} UNORDER_CONTENT [UNORDER_NEXT]* => {@@"</ul>\n"@@};
+UNORDER_NEXT ::= #explicitCopy "  " '*' UNORDER_CONTENT;
+UNORDER_CONTENT ::= => {@@"<li>\n<div class=\"li\">\n"@@} [WikiCode] => {@@"</div>\n</li>\n"@@} EOL;
+
+ORDER ::= #explicitCopy "  " '-' => {@@"<ol>\n"@@} ORDER_CONTENT [ORDER_NEXT]* => {@@"</ol>\n"@@};
+ORDER_NEXT ::= #explicitCopy "  " '-' ORDER_CONTENT;
+ORDER_CONTENT ::= => {@@"<li>\n<div class=\"li\">\n"@@} WikiCode => {@@"</div>\n</li>\n"@@} EOL;
+
+PARAGRAPH ::= #explicitCopy [EOL EOL]+ => {@@"<br/>\n"@@};
+NEWLINE ::= #explicitCopy "\\\\" => {@@"<br/>\n"@@};
+
+EXTERNAL ::=
+  [#explicitCopy
+   => local	prefix = "";
+   [
+    [[PROTOCOL #continue "://" DOMAIN [PATH]?]:url | [["www." DOMAIN [PATH]?]:url => prefix = "http://";]]
+    => {@@"<a class=\"urlextern\" ref=\"nofollow\" title=\"" + prefix + url + "\" href=\"" + prefix + url + "\">" + url + "</a>"@@}
+    ]
+   ]
+  ;
+
+PROTOCOL ::= ["http" | "ftp"] ['s']?;
+DOMAIN ::= ['A'..'Z'|'0'..'9'|'.'|'-']+;
+PATH ::= '/' [~DELIM]+;
+
+LINK_SECTION ::=
+  [#explicitCopy
+   ["[[section:" => {@@"<a class=\"intern section\" "@@}] #continue
+   [[[~']']+]:section
+    => {
+       if (existVariable(this.section.block[toUpperString(section)]) == true)
+	 {
+	   localref	theSection = this.section.block[toUpperString(section)];
+	   @@"href=\"" + theSection.name + theSection.extension + "\">" + theSection.title@@
+	 }
+     }
+    ] #continue
+   ["]]" => {@@"</a>"@@}]
+   ]
+  ;
+
+LINK ::=
+  [#explicitCopy
+   ["[[" => {@@"<a class=\"intern\" "@@}] #continue
+   [[[~'|']+]:link => {@@"href=\"" + link + "\">"@@}] #continue
+   '|' #continue
+   [WikiCode]+ #continue
+   ["]]" => {@@"</a>"@@}]
+   ]
+  ;
+
+EMAIL ::=
+  [#explicitCopy
+   [['A'..'Z' | '0'..'9' | '_' | '-' | '.']+ '@' ['A'..'Z' | '0'..'9' | '-' | '.']+]:email
+   => {@@"<a class=\"mail\" href=\"mailto:" + email + "\">" + email + "</a>"@@}
+   ]
+  ;
+
+IMAGE ::=
+  [#explicitCopy
+   "{{" => {@@"<img src=\""@@} #continue
+   [[~['?' | "}}"]]+]:path #continue ['?' [['0'..'9']+]:width ['x' [['0'..'9']+]:height]?]?
+   => {
+     copySmartFile(getWorkingPath() + "/" + path,
+		   getEnv("siteWWW") + "/" + path);
+     traceLine("copying the file: " + getEnv("siteWWW") + "/" + path);
+     @@path@@
+   }
+   "}}"
+   => {
+     @@"\" style=\""@@
+     if (width != ""){@@"width: " + width + "px; "@@}
+     if (height != ""){@@"height: " + height + "px;"@@}
+     @@"\" alt=\"\"/>"@@
+   }
+   ]
+  ;
+
+CODE ::=
+  [#explicitCopy
+   "<code>" => {@@"<pre class=\"code\">"@@} #continue
+   [[~"</code>"]+]:content => {@@composeHTMLLikeString(content)@@} #continue
+   "</code>" => {@@"</pre>"@@}
+   ]
+  ;
+
+VARIABLE ::=
+  [#explicitCopy
+   '$' [['A'..'Z' | '0'..'9']+]:name
+   => {
+      @@"<?php\n"@@
+      @@"require_once('variable/common.php');\n"@@
+      @@"echo getVariable('" + name + "');\n"@@
+      @@"?>\n"@@
+      if (existVariable(this.mySection) == true)
+      treeSwitchSectionTo(this.mySection, "PHP", ".php");
+      else
+	treeSwitchAllSectionsTo(this.section, "PHP", ".php");
+      local	key = toUpperString(name);
+      insert this.variable[key].name = name;
+      localref	theVar = this.variable[key];
+      insert theVar.type = "VARIABLE";
+    }
+   ]
+  ;
+
+FOOTNOTE ::= #explicitCopy "((" #continue [WikiCode]+ #continue "))";
+
+HEADLINE1 ::= #explicitCopy "======" => {@@"<h1>"@@} #continue WikiCode #continue "======" => {@@"</h1>"@@};
+HEADLINE2 ::= #explicitCopy "=====" => {@@"<h2>"@@} #continue WikiCode #continue "=====" => {@@"</h2>"@@};
+HEADLINE3 ::= #explicitCopy "====" => {@@"<h3>"@@} #continue WikiCode #continue "====" => {@@"</h3>"@@};
+HEADLINE4 ::= #explicitCopy "===" => {@@"<h4>"@@} #continue WikiCode #continue "===" => {@@"</h4>"@@};
+HEADLINE5 ::= #explicitCopy "==" => {@@"<h5>"@@} #continue WikiCode #continue "==" => {@@"</h5>"@@};
+
+EOL ::= #explicitCopy ['\r']? '\n' => {@@" "@@};

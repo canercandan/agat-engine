@@ -1,0 +1,15 @@
+/* User structure generated for the website @toUpperString(getEnv("siteDomain"))@ */
+create table	users
+(
+ id		integer	primary key	,
+ username	text	unique		,
+ password	text			,
+ id_group	integer
+);
+
+<%
+if (this.default_username != "" && this.default_password != "")
+  {@insert into users (username, password, id_group) values ('@this.default_username@', '@this.default_password@', 1);@}
+ else
+   {@insert into users (username, password, id_group) values ('admin', 'admin', 1);@}
+%>

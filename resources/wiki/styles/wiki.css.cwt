@@ -1,0 +1,22 @@
+/* Wiki CSS generated for the website @toUpperString(getEnv("siteDomain"))@ */
+.wiki p, .wiki blockquote, .wiki table, .wiki pre{/* margin: 0 0 1em */}
+.wiki em.u{font-style: normal; text-decoration: underline}
+.wiki a.urlextern:hover, .wiki a.urlextern:active, a.intern:hover, a.intern:active, a.intern:visited{color: black}
+.wiki a.urlextern:visited{color: purpule}
+.wiki a.urlextern{background: transparent url(../images/link_icon.gif) no-repeat scroll 0 1px; padding: 1px 0 1px 16px}
+.wiki a:link, .wiki a:visited{text-decoration: none}
+.wiki a.mail{background: transparent url(../images/mail_icon.gif) no-repeat scroll 0 1px; padding: 1px 0 1px 16px}
+.wiki a.intern{}
+.wiki h1, .wiki h2, .wiki h3, .wiki h4, .wiki h5, .wiki a.nolink{background-color: inherit; border-bottom: 1px solid #8CACBB;
+ color: black !important; font-weight: normal; margin: 0 0 1em; padding: 0.5em 0 0; text-decoration: none !important}
+.wiki h1{font-size: 160%; font-weight: bold; margin-left: 0}
+.wiki h2{font-size: 150%; margin-left: 20px}
+.wiki h3{border-bottom: medium none; font-size: 140%; font-weight: bold; margin-left: 40px}
+.wiki h4{border-bottom: medium none; font-size: 120%; font-weight: bold; margin-left: 60px}
+.wiki h5{border-bottom: medium none; font-size: 100%; font-weight: bold; margin-left: 80px}
+.wiki ul, .wiki ol{color: #638C9C; line-height: 1.5em; list-style-image: none; margin: 0 0 0.5em 1.5em}
+.wiki ul{list-style-type: square}
+.wiki .li{color: black; font-weight: normal}
+.wiki ol{font-weight: bold; list-style-type: decimal}
+.wiki pre{border: 1px dashed #8CACBB; color: black; font-size: 120%; overflow: auto; padding: 0.5em}
+.wiki pre.code{background-code: #F7F9FA}

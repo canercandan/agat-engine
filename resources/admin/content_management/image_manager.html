@@ -1,0 +1,154 @@
+<div id="contentError">&nbsp;</div>
+<table id="imgFromManagement">
+	<tr>
+		<td>
+			<div id="newImageForm" style="display: none">
+				<form name="newImageForm" method="POST" action="" enctype="multipart/form-data">
+				<input type="hidden" name="content_id" value="">
+				<input type="hidden" name="old_image" value="">
+				<input type="hidden" name="sav_type" value="new">
+				<table>
+					<tr>
+						<td><h2>Charger une nouvelle image</h2></td>
+					</tr>
+					<tr>
+						<td><input type="file" name="new_image" onChange="Javascript: checkExtension(this.value);"></td>
+					</tr>
+					<tr>
+						<td>
+							<table>
+								<tr>
+									<td>Nom de l'image : </td>
+									<td><input type="text" name="img_title" value="test"></td>
+								</tr>	
+								<tr>
+									<td>Description : </td>
+									<td><textarea name="imgDescription"></textarea></td>
+								</tr>	
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<table>
+								<tr>
+									<td>Affichage taille r&eacute;el</td>
+									<td><input type="checkbox" name="realSize" checked onChange="Javascript: setProportionOptions('newImageForm');"></td>
+								</tr>
+								<tr>
+									<td>Conserver les proportions</td>
+									<td><input type="checkbox" name="proportions" disabled="true" checked onChange="Javascript: setProportionOptions('newImageForm');"></td>
+								</tr>
+							</table>
+							<table class="proportionTbls">
+								<tr>
+									<td>Largeur de l'image</td>
+									<td>
+										<input type="text" name="new_width" onChange="Javascript: onlyInt(this.name, 'newImageForm');" disabled="true">
+									</td>
+									<td>
+										<select name="new_width_unit" disabled="true"><option selected>px</option><option>%</option></select>
+									</td>
+								</tr>
+								<tr>
+									<td>Hauteur de l'image</td>
+									<td>
+										<input type="text" name="new_height" onChange="Javascript: onlyInt(this.name, 'newImageForm');" disabled="true">
+									</td>
+									<td>
+										<select name="new_height_unit" disabled="true"><option selected>px</option><option>%</option></select>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+				<br>
+				<input type="button" class="inputButton" value="Modifier l'image existante" onClick="Javascript: showImageForms('edit');"/><br>
+				<input type="button" class="inputButton" value="Annuler" onClick="Javascript: editContent(false, '', 'images'); showClass('divStreaming', true);"/><br>
+				<input type="button" class="inputButton" value="Enregistrer" onClick="Javascript: checkNewImageForm();"/>
+				</form>
+			</div>
+				
+			<div id="imageForm">
+				<form method="POST" action="" name="imageForm">
+				<input type="hidden" name="content_id" value="">
+				<input type="hidden" name="content" value="">
+				<input type="hidden" name="img_title" value="">
+				<input type="hidden" name="img_src" value="">
+				<input type="hidden" name="sav_type" value="edit">
+				<table class="eMageTbl">
+					<tr>
+						<td><h2>Modifier cette image</h2></td>
+					</tr>
+					<tr>
+						<td>
+							<table>
+								<tr>
+									<td>Nom de l'image : </td>
+									<td><div id="edit_img_title"></div></td>
+								</tr>	
+								<tr>
+									<td>Description : </td>
+									<td><textarea name="imgDescription"></textarea></td>
+								</tr>	
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<table>
+								<tr>
+									<td>Affichage taille r&eacute;el</td>
+									<td><input type="checkbox" name="realSize" checked onChange="Javascript: setProportionOptions('imageForm');"></td>
+								</tr>
+								<tr>
+									<td>Conserver les proportions</td>
+									<td><input type="checkbox" name="proportions" disabled="true" checked onChange="Javascript: setProportionOptions('imageForm');"></td>
+								</tr>
+							</table>
+							<table class="proportionTbls">
+								<tr>
+									<td>Largeur de l'image</td>
+									<td>
+										<input type="text" name="new_width" onChange="Javascript: onlyInt(this.name, 'imageForm');" disabled="true">
+									</td>
+									<td>
+										<select name="new_width_unit" disabled="true"><option >px</option><option selected>%</option></select>
+									</td>
+								</tr>
+								<tr>
+									<td>Hauteur de l'image</td>
+									<td>
+										<input type="text" name="new_height" onChange="Javascript: onlyInt(this.name, 'imageForm');" disabled="true">
+									</td>
+									<td>
+										<select name="new_height_unit" disabled="true"><option>px</option><option selected>%</option></select>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+				<br>
+				<input class="inputButton" type="button" value="Charger une nouvelle image" onClick="Javascript: showImageForms('new');"/><br>
+				<input class="inputButton" type="button" value="Annuler" onClick="Javascript: editContent(false, '', 'images'); showClass('divStreaming', true);"/><br>
+				<input class="inputButton" type="button" value="Enregistrer" onClick="Javascript: checkImageForm();"/>
+				</form>
+			</div>
+		</td>
+		<td valign="top">
+			<table>
+				<tr>
+					<td><h2>Image actuelle</h2></td>
+				</tr>
+				<tr>
+					<td id="imageScale">Aper&ccedil;u : </td>
+				</tr>
+				<tr>
+					<td id="imagePreview">&nbsp;</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>

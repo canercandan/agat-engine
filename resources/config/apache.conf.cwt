@@ -1,0 +1,18 @@
+#
+# Apache config generated for the website @toUpperString(getEnv("siteDomain"))@
+#
+NameVirtualHost @getEnv("siteHost")@:@getEnv("sitePort")@
+
+<VirtualHost @getEnv("siteHost")@:@getEnv("sitePort")@>
+   ServerAdmin webmaster\@@getEnv("siteDomain")@
+   DocumentRoot "@getEnv("siteWWW")@"
+   ServerName @getEnv("siteDomain")@
+   ServerAlias www.@getEnv("siteDomain")@
+   ErrorLog "@getEnv("siteLogs")@/error_log"
+   CustomLog "@getEnv("siteLogs")@/access_log" combined
+   <Directory "@getEnv("siteWWW")@">
+      AllowOverride AuthConfig
+      Order allow,deny
+      Allow from all
+   </Directory>
+</VirtualHost>

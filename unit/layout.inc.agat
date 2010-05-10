@@ -1,0 +1,36 @@
+<!-- LAYOUT -->
+<layout called="main" width="1024px">
+  <write css>
+    margin: auto;
+  </write>
+  <vertical called="gauche" width="220px" height="600px">
+    <write css>
+      border: 1px solid black;
+      margin-right: 15px;
+    </write>
+    <horizontal called="logo" height="200px">
+      <write css>
+	padding: 10px;
+      </write>
+    </horizontal>
+    <horizontal called="menu">
+      <write css>
+	background-color: white;
+	color: white;
+	padding: 15px;
+      </write>
+    </horizontal>
+  </vertical>
+  <vertical called="droite" width="780px" height="500px">
+    <horizontal called="titre" height="50px">
+      <write css>
+	background-color: black;
+	color: white;
+	font-weight: bold;
+	padding: 5px;
+	text-align: right;
+      </write>
+    </horizontal>
+    <horizontal called="content"/>
+  </vertical>
+</layout>

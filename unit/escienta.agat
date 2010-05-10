@@ -1,0 +1,9 @@
+<!-- ESCIENTA WEBSITE -->
+<!-- HEADER FILE -->
+<include "header.inc.agat"/>
+<!-- CSS FILE -->
+<include path="css.inc.agat"/>
+<!-- LAYOUT FILE -->
+<include path="layout.inc.agat"/>
+<!-- SECTION FILE -->
+<include path="section.inc.agat"/>

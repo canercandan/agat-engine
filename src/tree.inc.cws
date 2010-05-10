@@ -1,0 +1,82 @@
+/*
+** All the useful functions needed to manage the tree.
+*/
+
+declare function	treeInit();
+declare function	treeCheck();
+declare function	treeInsertBlock(myBlock : node, name : value);
+
+function	treeInit()
+{
+  insert this.agat;
+  insert this.agat.block;
+  insert this.agat.header;
+  insert this.agat.body;
+  insert this.agat.modules;
+  insert this.agat.section;
+  insert this.agat.section.block;
+  insert this.agat.section.default_type = "HTML";
+  insert this.agat.section.default_extension = ".html";
+  insert this.agat.layout;
+  insert this.agat.variable;
+  insert this.agat.image;
+  insert this.agat.video;
+}
+
+function	treeCheck()
+{
+  if (this.agat.header.domain == "")
+    traceLine("You need to define a domain in the header!");
+  if (this.agat.header.web == "")
+    traceLine("You need to define a web server in the header!");
+  if (this.agat.header.default_username == "")
+    traceLine("You don't have putted an username in the header!");
+  if (this.agat.header.default_password == "")
+    traceLine("You don't have putted a password in the header!");
+}
+
+function	treeInsertBlock(myBlock : node, name : value)
+{
+  insert myBlock[name];
+  localref	theBlock = myBlock[name];
+  insert theBlock.block;
+  insert theBlock.name = name;
+}
+
+function	treeSwitchAllSectionsTo(theSection : node, type : value, extension : value)
+{
+  foreach var in theSection.block
+  {
+    var.type = type;
+    var.extension = extension;
+  }
+
+  theSection.default_type = type;
+  theSection.default_extension = extension;
+}
+
+function	treeSwitchSectionTo(mySection : node, type : value, extension : value)
+{
+  mySection.type = type;
+  mySection.extension = extension;
+}
+
+function	treeInsertWikiCode(myBlock : node)
+{
+  pushItem this.agat.wiki;
+  ref this.agat.wiki#back = myBlock.body#back;
+  localref	myWiki = this.agat.wiki#back;
+  insert myWiki.section;
+  ref myWiki.section = this.agat.section;
+  insert myWiki.variable;
+  ref myWiki.variable = this.agat.variable;
+  insert myWiki.image;
+  ref myWiki.image = this.agat.image;
+  insert myWiki.video;
+  ref myWiki.video = this.agat.video;
+  if (equalTrees(myBlock#parent#parent#parent, this.agat) == false)
+    {
+      insert myWiki.mySection;
+      ref myWiki.mySection = myBlock#parent#parent#parent;
+    }
+}

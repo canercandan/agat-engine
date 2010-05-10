@@ -1,0 +1,6 @@
+/* Common CSS generated for the website @toUpperString(getEnv("siteDomain"))@ */
+a, body, div, form, h1, h2, h3, h4, h5, img, li, ol, p, ul{border: 0; margin: 0; padding: 0}
+body{color: black; font-family: "Lucida Grande",Verdana,Lucida, Helvetica, Arial, sans-serif;
+  font-size: 80%; font-size-adjust: none; font-style: normal; font-variant: normal;
+  font-weight: normal; line-height: normal}
+.clear{clear: both}

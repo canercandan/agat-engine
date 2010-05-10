@@ -1,0 +1,69 @@
+<div id="streamError">&nbsp;</div>
+<table id="streamFromManagement">
+	<tr>
+		<td>
+			<div id="streamForm">
+				<form method="POST" action="" name="streamForm">
+				<input type="hidden" name="content_id" value="">
+				<input type="hidden" name="stream_size" value="true">
+				<input type="hidden" name="sav_type" value="edit_video">
+				<table>
+					<tr>
+						<td><h2>Modifier ce lecteur</h2></td>
+					</tr>
+					<tr>
+						<td>
+							<table>
+								<tr>
+									<td nowrap>Code du lecteur : </td>
+									<td nowrap>&nbsp;</td>
+								</tr>	
+							</table>
+							<textarea name="player_code" class="player_code" onChange="Javascript: updateStreamPreview();"></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<table>
+								<tr>
+									<td nowrap>Taille par d&eacute;faut </td>
+									<td><input type="checkbox" name="real_size" checked onChange="Javascript: setStreamSize();"></td>
+								</tr>
+							</table>
+							<table class="streamProportionTbls">
+								<tr>
+									<td nowrap>Largeur du lecteur</td>
+									<td>
+										<input type="text" name="new_width" onChange="Javascript: streamOnlyInt(this.name);" disabled="true">
+									</td>
+									<td>px</td>
+								</tr>
+								<tr>
+									<td nowrap>Hauteur du lecteur</td>
+									<td>
+										<input type="text" name="new_height" onChange="Javascript: streamOnlyInt(this.name);" disabled="true">
+									</td>
+									<td>px</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+				<br>
+				<input class="inputButton" type="button" value="Annuler" onClick="Javascript: editContent(false, '', 'stream'); showClass('divStreaming', true);"/><br>
+				<input class="inputButton" type="button" value="Enregistrer" onClick="Javascript: checkStreamForm();"/>
+				</form>
+			</div>
+		</td>
+		<td valign="top">
+			<table>
+				<tr>
+					<td><h2>Pr&eacute;visualisation</h2></td>
+				</tr>
+				<tr>
+					<td id="streamPreview">&nbsp;</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>

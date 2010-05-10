@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+          "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+	  <!ENTITY copyright SYSTEM "copyright.xml">
+	  <!ENTITY introduction SYSTEM "introduction.xml">
+	  ]>
+<book lang="fr">
+  <bookinfo>
+    <title>Le langage AGAT</title>
+    <author>
+      <firstname>Caner</firstname>
+      <surname>Candan</surname>
+    </author>
+    <author>
+      <firstname>Ludovic</firstname>
+      <surname>Haefflinger</surname>
+    </author>
+    <copyright>
+      <year>2009</year>
+      <holder>Koupix</holder>
+    </copyright>
+  </bookinfo>
+  &copyright;
+  &introduction;
+</book>

@@ -1,0 +1,101 @@
+/*
+** Convert either:
+**  - Agat code to Html or
+**  - Agat code to KPX tree or
+**  - KPX tree to Html or
+**  - KPX tree to Agat code content
+**
+** Create a tree file and KPX file
+** You have to use a file using the extension .agat or .kpx like first argument.
+** The second argument is used to define that you want for example convert from
+** Agat code to Kpx tree in defining a file in .kpx.
+**
+** Command:
+** codeworker -nologo -stack 8000 -path `pwd` -script byFile.cws -args $*
+*/
+
+#include "tree.inc.cws"
+#include "prettyPrinter.inc.cws"
+#include "agatToKpx.inc.cws"
+
+function	hasExt(file, ext){return endString(file, ext);}
+
+local	src = _ARGS[0];
+local	dst = _ARGS[1];
+
+if (src == '')
+  {
+    traceLine('First argument missing:');
+    traceLine('You must specify either an Agat file or a KPX file like first argument.');
+    exit(42);
+  }
+
+if (hasExt(src, '.agat') == false &&
+    //hasExt(src, '.kpx') == false &&
+    hasExt(src, '.tree') == false)
+  {
+    traceLine('It is not an Agat file or a KPX file.');
+    exit(42);
+  }
+
+local	pwd = getWorkingPath();
+
+traceLine('Running on ' + src + ' with the working path ' + pwd);
+
+if (hasExt(src, '.agat') == true) /* Agat code to ... */
+  {
+    local	ext = '.agat';
+    local	fileOut = pwd + replaceString(ext, '.out', src);
+    local	fileTree = pwd + replaceString(ext, '.tree', src);
+    local	fileKPX = pwd + replaceString(ext, '.kpx', src);
+
+    treeInit();
+    translate('./agat.cwp', project, src, fileOut);
+
+    if (dst == '') /* Agat code to Html content */
+      prettyPrinter();
+    else if (hasExt(dst, '.kpx') == true) /* Agat code to KPX tree */
+      {
+	fileKPX = pwd + dst;
+	saveToFile(fileKPX, agatToKpx());
+	indentFile(fileKPX, "C++");
+	traceLine('Agat code to KPX tree');
+      }
+    else
+      {
+	traceLine('Error:');
+	traceLine('The second argument is not a file known.');
+	exit(42);
+      }
+
+    saveProject(fileTree);
+  }
+/*  else if (hasExt(src, '.kpx') == true) /\* KPX tree to ... *\/ */
+/*    { */
+/*      local	ext = '.kpx'; */
+/*      local	fileTree = pwd + replaceString(ext, '.tree', src); */
+
+/*      //loadProject(fileTree); */
+
+/*      if (dst == '') /\* KPX tree to Html content *\/ */
+/*        {} /\* TODO *\/ */
+/*      else if (hasExt(dst, '.agat') == true) /\* KPX tree to Agat code *\/ */
+/*        {} /\* TODO *\/ */
+/*      else */
+/*        { */
+/* 	 traceLine('Error:'); */
+/* 	 traceLine('The second argument is not a file known.'); */
+/* 	 exit(42); */
+/*        } */
+/*    } */
+ else if (hasExt(src, '.tree') == true) /* Agat code to Html content */
+   {
+     local	ext = '.tree';
+     local	fileOut = pwd + replaceString(ext, '.out', src);
+
+     loadProject(src);
+     prettyPrinter();
+     saveProject(src + '.new');
+   }
+
+traceLine('End of running ' + src);

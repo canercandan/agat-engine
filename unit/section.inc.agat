@@ -1,0 +1,17 @@
+<!-- SECTION -->
+<call-layout with="logo">
+  <write wiki>
+    {{images/test/hello.png?200}}
+  </write>
+</call-layout>
+
+<call-layout with="menu">
+  <write wiki>
+**[[section:index]]**
+
+**[[section:apropos]]**
+  </write>
+</call-layout>
+
+<include path="index.inc.agat"/>
+<include path="apropos.inc.agat"/>

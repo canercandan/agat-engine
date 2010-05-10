@@ -1,0 +1,9 @@
+AuthType Digest
+AuthName "agat"
+<%
+if (getEnv("siteWeb") == "apache22")
+  @@"AuthUserFile " + getEnv("siteVariable") + "/.htpasswd"@@
+else
+  @@"AuthDigestFile " + getEnv("siteVariable") + "/.htpasswd"@@
+%>
+Require valid-user

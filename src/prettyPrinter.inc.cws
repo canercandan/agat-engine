@@ -1,0 +1,477 @@
+/*
+** The famous Pretty Printer allowing to read the tree and generate the Html content.
+** The output's files are saved in the folder called 'agat'.
+**
+** Refer to the function 'defineEnv' to know all the path used by Pretty Printer.
+*/
+
+declare function	prettyPrinter();
+declare function	defineEnv();
+
+declare function	prettyPrintToContent();
+declare function	prettyPrintToConfig();
+declare function	prettyPrintToAdmin();
+declare function	prettyPrintToVariable();
+declare function	prettyPrintToUser();
+declare function	prettyPrintToGroup();
+declare function	prettyPrintToForum();
+
+declare function	createDir();
+declare function	createFiles();
+declare function	createTheHeaderSection(title : value, var : node);
+declare function	createTheBodySection(key : value, var : node);
+declare function	createTheFooterSection();
+declare function	fitWikiToHtml();
+declare function	createTheLayouts(sSection : value, theBlock : node, tab : value);
+declare function	createTheLayoutsOne(sSection : value, theBlock : node, key : value, tab : value);
+declare function	createTheCss(theBlock : node);
+declare function	createTheCssOne(theBlock : node);
+declare function	generateTab(tab : value);
+declare function	getLayoutContent(theBlock : node);
+
+function	prettyPrinter()
+{
+  treeCheck();
+  defineEnv();
+  prettyPrintToContent();
+  prettyPrintToConfig();
+  prettyPrintToAdmin();
+  prettyPrintToVariable();
+  prettyPrintToUser();
+  prettyPrintToGroup();
+  prettyPrintToForum();
+}
+
+function	defineEnv()
+{
+  putEnv("siteDomain", this.agat.header.domain);
+  putEnv("siteWeb", this.agat.header.web);
+  putEnv("siteHost", this.agat.header.host);
+  putEnv("sitePort", this.agat.header.port);
+  putEnv("siteDefaultUsername", this.agat.header.default_username);
+  putEnv("siteDefaultPassword", this.agat.header.default_password);
+
+  putEnv("siteRootDir", getWorkingPath() + "agat/" + getEnv("siteDomain"));
+  putEnv("agatResources", "../resources");
+
+  putEnv("siteConfig", getWorkingPath() + "agat/" + "/config");
+  putEnv("agatConfig", getEnv("agatResources") + "/config");
+
+  putEnv("siteWWW", getEnv("siteRootDir") + "/www");
+  putEnv("siteLogs", getEnv("siteRootDir") + "/logs");
+  putEnv("siteDatabase", getEnv("siteRootDir") + "/database");
+
+  putEnv("siteWikiPath", getEnv("siteWWW") + "/wiki");
+  putEnv("agatWikiPath", getEnv("agatResources") + "/wiki");
+
+  putEnv("siteCommonPath", getEnv("siteWWW") + "/common");
+  putEnv("agatCommonPath", getEnv("agatResources") + "/common");
+
+  putEnv("siteCssWikiPath", getEnv("siteWikiPath") + "/styles");
+  putEnv("agatCssWikiPath", getEnv("agatWikiPath") + "/styles");
+
+  putEnv("siteCssCommonPath", getEnv("siteCommonPath") + "/styles");
+  putEnv("agatCssCommonPath", getEnv("agatCommonPath") + "/styles");
+
+  putEnv("siteImagesWikiPath", getEnv("siteWikiPath") + "/images");
+  putEnv("agatImagesWikiPath", getEnv("agatWikiPath") + "/images");
+
+  putEnv("agatAdmin", getEnv("agatResources") + "/admin");
+  putEnv("siteAdmin", getEnv("siteWWW") + "/admin");
+
+  putEnv("agatVariable", getEnv("agatAdmin") + "/variable");
+  putEnv("siteVariable", getEnv("siteAdmin") + "/variable");
+
+  putEnv("agatUser", getEnv("agatAdmin") + "/user");
+  putEnv("siteUser", getEnv("siteAdmin") + "/user");
+
+  putEnv("agatGroup", getEnv("agatAdmin") + "/group");
+  putEnv("siteGroup", getEnv("siteAdmin") + "/group");
+
+  putEnv("agatForum", getEnv("agatAdmin") + "/forum");
+  putEnv("siteForum", getEnv("siteWWW") + "/forum");
+}
+
+function	prettyPrintToContent()
+{
+  if (getEnv("siteDomain") == "")
+    return;
+
+  fitWikiToHtml();
+
+  createDir();
+  createFiles();
+}
+
+function	prettyPrintToConfig()
+{
+  if (getEnv("siteWeb") == "")
+    return;
+
+  if (getEnv("siteWeb") == "apache13" ||
+      getEnv("siteWeb") == "apache22")
+    {
+      if (getEnv("siteHost") == "")
+	putEnv("siteHost", "*");
+      if (getEnv("sitePort") == "")
+	putEnv("sitePort", "80");
+
+      generate(getEnv("agatConfig") + "/apache.conf.cwt", this,
+	       getEnv("siteConfig") + "/" + getEnv("siteDomain") + ".conf");
+    }
+  else
+    traceLine("the web application server called " + getEnv("siteWeb") + " is not available yet!");
+}
+
+function	prettyPrintToAdmin()
+{
+  local	dico = {"common/header.php",
+		"common/footer.php",
+		"common/main_header.php",
+		"common/common.css",
+		"common/common.js",
+		"common/main.js",
+		"common/common.php",
+		"common/body.php",
+		"index.php",
+		"user.php",
+		"group.php",
+		"main.php"};
+
+  foreach item in dico
+    copySmartFile(getEnv("agatAdmin") + "/" + item, getEnv("siteAdmin") + "/" + item);
+
+  generate(getEnv("agatAdmin") + "/common/interface.css.cwt", this.agat,
+	   getEnv("siteAdmin") + "/common/interface.css");
+
+  //copySmartFile(getEnv("agatAdmin") + "/index/images/admin.jpg", getEnv("siteAdmin") + "/index/images/admin.jpg");
+}
+
+function	prettyPrintToVariable()
+{
+  if (existVariable(this.agat.variable) == false)
+    return;
+  if (isEmpty(this.agat.variable) == true)
+    return;
+
+  traceLine("creating the variable interface: " + getEnv("siteVariable"));
+
+  generate(getEnv("agatVariable") + "/structure.sql.cwt", this.agat,
+	   getEnv("siteVariable") + "/structure.sql");
+
+  system("sqlite " + getEnv("siteDatabase") + "/database.db '.read " +
+	 getEnv("siteVariable") + "/structure.sql'");
+
+  local	dico = {"common.php",
+		"index.php"};
+
+  foreach item in dico
+    copySmartFile(getEnv("agatVariable") + "/" + item, getEnv("siteVariable") + "/" + item);
+}
+
+function	prettyPrintToUser()
+{
+  traceLine("creating the user interface: " + getEnv("siteUser"));
+
+  generate(getEnv("agatUser") + "/structure.sql.cwt", this.agat.header,
+	   getEnv("siteUser") + "/structure.sql");
+
+  system("sqlite " + getEnv("siteDatabase") + "/database.db '.read " +
+	 getEnv("siteUser") + "/structure.sql'");
+
+  generate(getEnv("agatUser") + "/connect.php.cwt", this,
+	   getEnv("siteUser") + "/connect.php");
+
+  local	dico = {"common.php",
+		"user_header.php",
+		"user.css"};
+
+  foreach item in dico
+    copySmartFile(getEnv("agatUser") + "/" + item, getEnv("siteUser") + "/" + item);
+}
+
+function	prettyPrintToGroup()
+{
+  traceLine("creating the group interface: " + getEnv("siteGroup"));
+
+  generate(getEnv("agatGroup") + "/structure.sql.cwt", this.agat.header,
+	   getEnv("siteGroup") + "/structure.sql");
+
+  system("sqlite " + getEnv("siteDatabase") + "/database.db '.read " +
+	 getEnv("siteGroup") + "/structure.sql'");
+
+  local	dico = {"common.php",
+		"group_header.php",
+		"group.css"};
+
+  foreach item in dico
+    copySmartFile(getEnv("agatGroup") + "/" + item, getEnv("siteGroup") + "/" + item);
+}
+
+function	prettyPrintToForum()
+{
+  if (existVariable(this.agat.forum) == false)
+    return;
+
+  local	forum = this.agat.forum;
+
+  if (forum == "")
+    return;
+
+  traceLine("creating forum: " + getEnv("siteForum") + "/" + forum);
+
+  copySmartDirectory(getEnv("agatForum") + "/" + forum,
+		     getEnv("siteForum") + "/" + forum);
+}
+
+function	createDir()
+{
+  createDirectory(getEnv("siteWWW"));
+  createDirectory(getEnv("siteLogs"));
+  createDirectory(getEnv("siteDatabase"));
+  createDirectory(getEnv("siteConfig"));
+  createDirectory(getEnv("siteCssWikiPath"));
+  createDirectory(getEnv("siteImagesWikiPath"));
+  createDirectory(getEnv("siteCssCommonPath"));
+  createDirectory(getEnv("siteAdmin"));
+  createDirectory(getEnv("siteAdmin") + "/common");
+  copySmartDirectory(getEnv("agatAdmin") + "/log", getEnv("siteAdmin") + "/log");
+  copySmartDirectory(getEnv("agatAdmin") + "/images", getEnv("siteAdmin") + "/images");
+  copySmartDirectory(getEnv("agatAdmin") + "/content_management", getEnv("siteAdmin") + "/content_management");
+}
+
+function	createFiles()
+{
+  foreach var in this.agat.section.block
+  {
+    local	key = key(var);
+    local	name = var.name;
+    local	title = var.title;
+    local	sInfo = "";
+
+    sInfo += createTheHeaderSection(title, var);
+    sInfo += createTheBodySection(key, var);
+    sInfo += createTheFooterSection();
+
+    local	path = getEnv("siteWWW") + "/" + toLowerString(name) + var.extension;
+
+    traceLine("creating the file: " + path);
+    saveToFile(path, sInfo);
+  }
+
+  generate(getEnv("agatCssWikiPath")  + "/wiki.css.cwt", this,
+	   getEnv("siteCssWikiPath") + "/wiki.css");
+
+  generate(getEnv("agatCssCommonPath") + "/top.css.cwt", this,
+	   getEnv("siteCssCommonPath") + "/top.css");
+
+  generate(getEnv("agatCssCommonPath") + "/common.css.cwt", this,
+	   getEnv("siteCssCommonPath") + "/common.css");
+
+  generate(getEnv("agatCssCommonPath") + "/interface.css.cwt", this,
+	   getEnv("siteCssCommonPath") + "/interface.css");
+
+  saveToFile(getEnv("siteCssCommonPath") + "/layout.css",
+	     "/* Layout CSS generated for the website " +
+	     toUpperString(getEnv("siteDomain")) + " */\n" +
+	     createTheCssOne(this.agat.layout));
+
+  copySmartDirectory(getEnv("agatImagesWikiPath"), getEnv("siteImagesWikiPath"));
+}
+
+function	createTheHeaderSection(title : value, var : node)
+{
+  local		sInfo = "";
+
+  if (var.type == "PHP")
+    {
+      sInfo += "<?php\n";
+      sInfo += "session_start();\n";
+      sInfo += "require_once('admin/common/common.php');\n";
+      sInfo += "if(!empty($_SESSION['admin'])) require_once('admin/content_management/sav_content.tpl.php');\n";
+      sInfo += "?>\n";
+    }
+
+  if (var.type == "PHP")
+    sInfo += "<?php echo \"";
+  sInfo += "<?xml version='1.0' encoding='UTF-8'?>\n";
+  if (var.type == "PHP")
+    sInfo += "\"; ?>\n";
+
+  sInfo += "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" ";
+  sInfo += "\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n";
+  sInfo += "<html xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">\n";
+  sInfo += "  <head>\n";
+  sInfo += "    <title>" + title + "</title>\n";
+  sInfo += "    <link rel=\"stylesheet\" type=\"text/css\" href=\"common/styles/layout.css\"/>\n";
+  sInfo += "    <link rel=\"stylesheet\" type=\"text/css\" href=\"common/styles/top.css\"/>\n";
+  sInfo += "    <link rel=\"stylesheet\" type=\"text/css\" href=\"common/styles/common.css\"/>\n";
+  sInfo += "    <link rel=\"stylesheet\" type=\"text/css\" href=\"wiki/styles/wiki.css\"/>\n";
+
+  if (var.type == "PHP")
+    sInfo += "<?php if(!empty($_SESSION['admin'])) require_once('admin/content_management/website_require_header.tpl.php'); ?>";
+
+  sInfo += "  </head>\n";
+  return (sInfo);
+}
+
+function	createTheBodySection(key : value, var : node)
+{
+  local		sInfo = "";
+  local		name = toUpperString(this.agat.layout.name);
+
+  sInfo += "  <body>\n";
+
+  if (var.type == "PHP")
+    sInfo += "<?php if(!empty($_SESSION['admin'])) require_once('admin/content_management/body.tpl.php'); ?>";
+
+  sInfo += "<!-- begining of the " + key + " section -->\n";
+  sInfo += createTheLayoutsOne(key, this.agat.layout, name, 4);
+  sInfo += "<!-- end of the " + key + " section -->\n";
+  sInfo += "  </body>\n";
+
+  return (sInfo);
+}
+
+function	createTheFooterSection()
+{
+  local		sInfo = "";
+
+  sInfo += "</html>\n";
+  return (sInfo);
+}
+
+function	generateTab(tab : value)
+{
+  local		sInfo = "";
+  local		i = 0;
+
+  while ($i < tab$)
+    {
+      sInfo += " ";
+      i = $i + 1$;
+    }
+  return (sInfo);
+}
+
+function	fitWikiToHtml()
+{
+  foreach var in this.agat.wiki
+    translateString("./wiki.cwp", var, var);
+}
+
+function	createTheLayouts(sSection : value, theBlock : node, tab : value)
+{
+  local		sInfo = "";
+
+  foreach var in theBlock
+    sInfo += createTheLayoutsOne(sSection, var, key(var), tab);
+  return (sInfo);
+}
+
+function	createTheLayoutsOne(sSection : value, theBlock : node, key : value, tab : value)
+{
+  local		name = theBlock.name;
+  local		sInfo = "";
+
+  sInfo += generateTab(tab);
+  sInfo += "<div id=\"" + name + "\">\n";
+  if (isEmpty(theBlock.block) == false)
+    sInfo += createTheLayouts(sSection, theBlock.block, $tab + 2$);
+  else
+    {
+      if (existVariable(this.agat.section.block[sSection].block[key]) == true)
+	sInfo += getLayoutContent(this.agat.section.block[sSection].block[key]);
+      else if (existVariable(this.agat.block[key]) == true)
+	sInfo += getLayoutContent(this.agat.block[key]);
+    }
+  if (theBlock.type == "HORIZONTAL")
+    if (isEmpty(theBlock.block) == false)
+      if (theBlock.block#front.type == "VERTICAL")
+	{
+	  sInfo += generateTab($tab + 2$);
+	  sInfo += "<div class=\"clear\"></div>\n";
+	}
+  sInfo += generateTab(tab);
+  sInfo += "</div>\n";
+  return (sInfo);
+}
+
+function	createTheCss(theBlock : node)
+{
+  local		sInfo = "";
+
+  foreach var in theBlock
+    sInfo += createTheCssOne(var);
+  return (sInfo);
+}
+
+function	createTheCssOne(theBlock : node)
+{
+  local	name = theBlock.name;
+  local	width = theBlock.width;
+  local	height = theBlock.height;
+  local	type = theBlock.type;
+  local	sInfo = "";
+
+  sInfo += "#" + name + "{";
+  foreach var in theBlock.block.body
+  {
+    if (var.type != "CSS")
+      continue;
+    sInfo += var;
+  }
+  if (width != "")
+    sInfo += "width: " + width + "; ";
+  if (height != "")
+    sInfo += "height: " + height + "; ";
+  if (type == "VERTICAL")
+    sInfo += "float: left;";
+  sInfo += "}\n";
+  if (isEmpty(theBlock.block) == false)
+    sInfo += createTheCss(theBlock.block);
+  return (sInfo);
+}
+
+function	getLayoutContent(theBlock : node)
+{
+  if (theBlock.type != "CALL-LAYOUT")
+    return ("");
+
+  local		sInfo = "";
+
+  foreach var in theBlock.block.body
+  {
+    if (var.type == "WIKI")
+      sInfo += translateString("./wiki.cwp", var, var);
+    else if (var.type == "VARIABLE")
+      {
+	sInfo +=
+	  "<div id='text_" + var.name + "' class='dynamicText' <?php if(!empty($_SESSION['admin'])){ ?> title=\"Modifier la zone\" onClick=\"javascript: editContent(true, 'text_" + var.name + "', '" + var.name + "', 'text'); showClass('divStreaming', false);\" <?php } ?> >\n" +
+	  "<?php echo getContent('../database/database.db', '" + var.name + "'); ?>\n" +
+	  "</div>\n"
+	  //"echo getVariable('" + var.name + "');\n" +
+	  ;
+      }
+    else if (var.type == "IMAGE")
+      {
+	sInfo +=
+	  "<div id='img_" + var.name + "' class='dynamicImage' <?php if(!empty($_SESSION['admin'])){ ?> title=\"Modifier la zone\" onClick=\"javascript: showClass('divStreaming', false); editContent(true, 'img_" + var.name + "', '" + var.name + "', 'image');\" <?php } ?> >\n" +
+	  "<?php echo getContent('../database/database.db', '" + var.name + "'); ?>\n" +
+	  "</div>\n"
+	  ;
+      }
+    else if (var.type == "VIDEO")
+      {
+	sInfo +=
+	  "<div id='vid_" + var.name + "' class='divStreaming'><?php if(!empty($_SESSION['admin'])){ ?> <div class=\"editStreaming\"><input type=\"button\" value=\"Modifier le streaming\" onClick=\"Javascript: editContent(true, 'vid_" + var.name + "', '" + var.name + "', 'video'); showClass('divStreaming', false);\"></div><?php } ?>\n" +
+	  "<?php echo getContent('../database/database.db', '" + var.name + "'); ?>\n" +
+	  "</div>\n"
+	  ;
+      }
+    else
+      sInfo += var;
+  }
+
+  return (sInfo);
+}

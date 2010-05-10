@@ -1,0 +1,21 @@
+/* Variable structure generated for the website @toUpperString(getEnv("siteDomain"))@ */
+create table	variables
+(
+	key	text	primary key	,
+	value	text			,
+	type    text
+);
+
+<%
+foreach var in this.variable
+{@insert into variables values ('@var.name@', "text de test", '@var.type@');
+@}
+
+foreach var in this.image
+{@insert into variables values ('@var.name@', "<img src='images/hello.png'>", '@var.type@');
+@}
+
+foreach var in this.video
+{@insert into variables values ('@var.name@', "<object width='425' height='344'><param name='movie' value='http://www.youtube.com/v/1X9g-kHeTTU&hl=fr_FR&fs=1&'></param><param name='allowFullScreen' value='true'></param><param name='allowscriptaccess' value='always'></param><embed wmode='transparent' src='http://www.youtube.com/v/1X9g-kHeTTU&hl=fr_FR&fs=1&' type='application/x-shockwave-flash' allowscriptaccess='always' allowfullscreen='true' width='425' height='344'></embed></object>", '@var.type@');
+@}
+%>

@@ -1,0 +1,127 @@
+<%
+local	sDomain = toUpperString(getEnv("siteDomain"));
+local	sDomainFmted = replaceString(".", "1", sDomain);
+%><?php
+/* Connect source generated for the website @sDomain@ */
+
+if (defined('MASK') == false)
+  define('MASK', 0);
+
+require_once('../user/common.php');
+require_once('../group/common.php');
+
+session_start();
+session_name('@sDomainFmted@');
+
+if (isset($_GET['action']) == true)
+  {
+    $action = $_GET['action'];
+
+    if ($action == 'destroy')
+      {
+	$_SESSION = array();
+	session_destroy();
+	$ctrl = true;
+      }
+    else if ($action == 'login')
+      {
+	$id = checkUser($_POST['username'], $_POST['password']);
+	$ctrl = ($id >= 0);
+	if ($ctrl == true)
+	  {
+	    $_SESSION['logged'] = true;
+	    $_SESSION['id'] = $id;
+	    list($_SESSION['username'], $password, $id_group) = getUser($id);
+	    list($name, $_SESSION['rights']) = getGroup($id_group);
+	  }
+      }
+    else
+      $ctrl = false;
+
+    header('Location:index.php?' . (($ctrl == false) ? 'error=1' : ''));
+    exit(0);
+  }
+
+if (isset($_SESSION['logged']) == false)
+  {
+?>
+<html>
+<head>
+<title>Login</title>
+<link rel="stylesheet" type="text/css" href="../../common/styles/common.css"/>
+<link rel="stylesheet" type="text/css" href="../../common/styles/interface.css"/>
+</head>
+<body>
+<div>
+
+<?php
+if (isset($_GET['error']) == true)
+  {
+    if ($_GET['error'] == '1')
+      {
+?>
+
+<blockquote class="error">
+Username or Password incorrect.
+</blockquote>
+
+<?php
+      }
+  }
+?>
+
+<form action="index.php?action=login" method="post">
+<table>
+<caption>Login</caption>
+<tbody>
+<tr>
+<th>Username</th><td><input type="text" name="username" value="<?php echo (isset($_POST['username']) == true) ? $_POST['username'] : ''; ?>"/></td>
+</tr>
+<tr>
+<th>Password</th><td><input type="text" name="password"/></td>
+</tr>
+<tr>
+<td/>
+<td><input type="submit" value="Sign In"/> <a href="index.php?">Cancel</a></td>
+</tbody>
+</table>
+</form>
+
+</div>
+</body>
+</html>
+
+<?php
+    exit(0);
+  }
+
+if (isset($_SESSION['rights']) == false)
+  exit(0);
+
+$mask = 1 << MASK;
+if (($_SESSION['rights'] & $mask) != $mask)
+  {
+?>
+<html>
+<head>
+<title>Forbidden</title>
+<link rel="stylesheet" type="text/css" href="../common/styles/common.css"/>
+<link rel="stylesheet" type="text/css" href="../common/styles/interface.css"/>
+</head>
+<body>
+<div>
+
+<a href="index.php?action=destroy">Sign Out</a>
+
+<blockquote class="error">
+You are not allowed to access to this section with the account <?php echo $_SESSION['username']; ?>.
+Your rights are not enough.
+</blockquote
+
+</div>
+</body>
+</html>
+<?php
+    exit(0);
+  }
+?>

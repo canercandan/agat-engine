@@ -1,0 +1,120 @@
+/*
+** Transform an Agat code to a KPX tree to be understood
+** by Python dictionnary module.
+*/
+
+declare	function	agatToKpx();
+declare function	getAttributes(theNode : node, attributeNames : node);
+declare function	getListItems(theNode : node);
+
+function	agatToKpx()
+{
+  local sInfo = '';
+  local attributeNames;
+
+  sInfo +=
+    "{\n"
+    "'.agat':\n"
+    "{\n";
+
+  getVariableAttributes(this.agat, attributeNames);
+  sInfo += getAttributes(this.agat, attributeNames);
+
+  sInfo +=
+    "},\n"
+    "}\n";
+
+  return sInfo;
+}
+
+function	getAttributes(theNode : node, attributeNames : node)
+{
+  local sInfo = '';
+
+  foreach item in attributeNames
+  {
+    local sName = key(item);
+
+    switch (sName)
+      {
+      case "wiki":
+      case "section":
+      case "variable":
+      case "image":
+      case "video":
+      case "mySection":
+	continue;
+      default:
+      }
+
+    localref node = #evaluateVariable("theNode." + key(item));
+
+    sInfo += "'." + sName + "': ";
+
+    if (equalTrees(node#parent, theNode) == false)
+      {
+	sInfo += "'&ref: ";
+	local	sName;
+	getCompleteName(node, sName);
+	sInfo += sName;
+	sInfo += "',\n";
+	continue;
+      }
+
+    if (node.empty() == false)
+      {
+	sInfo += "\n{\n";
+	sInfo += "'TYPE': 'list',\n";
+	sInfo += getListItems(node);
+	sInfo += "},\n";
+	continue;
+      }
+
+    local attributeNames;
+
+    getVariableAttributes(node, attributeNames);
+    if (attributeNames.empty() == false)
+      {
+	sInfo += "\n{\n";
+	sInfo += "'TYPE': 'dict',\n";
+	sInfo += getAttributes(node, attributeNames);
+	sInfo += "\n},\n";
+	continue;
+      }
+
+    sInfo += "\"\"\"" + node + "\"\"\"";
+
+    if (last(item) == false)
+      sInfo += ",\n";
+  }
+
+  return sInfo;
+}
+
+function	getListItems(theNode : node)
+{
+  local sInfo = '';
+
+  foreach item in theNode
+  {
+    local sName = key(item);
+    local attributeNames;
+
+    sInfo +=
+      "'" + sName + "':\n"
+      "{\n";
+
+    if (item != "")
+      sInfo += "'VALUE': \"\"\"" + item + "\"\"\",\n";
+
+    getVariableAttributes(item, attributeNames);
+    sInfo += getAttributes(item, attributeNames);
+
+    if (last(item) == false)
+      sInfo += "\n},\n";
+    else
+      sInfo += "\n}\n";
+  }
+
+  return sInfo;
+}

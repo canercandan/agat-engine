@@ -1,0 +1,41 @@
+#include "tree.inc.cws"
+#include "prettyPrinter.inc.cws"
+
+#use SELECT
+
+declare function	recv();
+declare function	addclient();
+declare function	delclient();
+
+traceObject(this, 4);
+
+SELECT::setRecvCallback('recv');
+SELECT::setAddclientCallback('addclient');
+SELECT::setDelclientCallback('delclient');
+SELECT::execute(4242);
+
+function	recv()
+{
+  traceLine("receiving ...");
+
+  local	body = SELECT::recvFromClient();
+  local	res = translateString("./agat.cwp", project, body);
+
+  insert this["body"] = body;
+  insert this["res"] = res;
+
+  traceObject(this, 4);
+
+  traceLine("received body: [" + body + "]");
+  //traceLine("translate result: [" + res + "]");
+}
+
+function	addclient()
+{
+  traceLine("new client [" + SELECT::getClientID() + "]");
+}
+
+function	delclient()
+{
+  traceLine("client left [" + SELECT::getClientID() + "]");
+}

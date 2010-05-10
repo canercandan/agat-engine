@@ -1,0 +1,40 @@
+<!-- INDEX -->
+<section called="index" title="Page d'accueil">
+  <call-layout with="titre">Page d'accueil</call-layout>
+
+  <call-layout with="content">
+    <write wiki>
+====== Presentation ======
+===== Coucou =====
+==== Caca ====
+=== Pipi ===
+== Pi ==
+**L**a voiture est dans le //garage//.
+
+  * ligne 1    cool
+  * ligne 2        wwawa
+  * fdfd
+  - dfsfds
+  - fdsfds
+
+<del>test@fdfsd.com</del>
+
+//**http://www.google.fr/tefdsffdsfdf/?fdsfd**//
+
+<code>
+int	main()
+{
+	return (0);
+}
+</code>
+    </write>
+    <write html><br/></write>
+    <variable called="signature"/>
+    <write html><br/></write>
+    <image called="hello"/>
+    <write html><br/></write>
+    <video called="lol"/>
+    <write html><br/></write>
+    <image called="caca"/>
+  </call-layout>
+</section>

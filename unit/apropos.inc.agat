@@ -1,0 +1,12 @@
+<!-- APROPOS -->
+<section called="apropos" title="A propos">
+  <call-layout with="titre">A propos</call-layout>
+
+  <call-layout with="content">
+    <write wiki>
+      Notre site est tout //nouveau//.
+
+      __**HF**__
+    </write>
+  </call-layout>
+</section>

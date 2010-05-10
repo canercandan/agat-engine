@@ -1,0 +1,17 @@
+.userTable {
+    width: 500px;
+    border: thin solid #6495ED;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.userTable a{
+    font-size: 10px;
+}
+
+#addUser {
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: right;
+}

@@ -1,0 +1,72 @@
+<!-- header information -->
+<header domain="test01.escienta.com" web="apache13" host="91.121.151.238"/>
+
+<!-- layout configuration -->
+<layout>
+  <vertical called="left" width="100px"/>
+  <vertical called="right" height="500px">
+    <horizontal called="right_top" height="30%"/>
+    <horizontal called="right_bottom"/>
+  </vertical>
+</layout>
+
+<!-- left layout by default -->
+<call-layout with="left">
+<write wiki>
+<!--   * [[homepage|**Homepage**]] -->
+<!--   * [[contact|**Contact**]] -->
+**[[homepage.html|Homepage]]**
+**[[contact.html|Contact]]**
+
+http://www.google.com
+
+www.google.fr/test.html
+
+<!-- <sup>dasfsdfsd</sup> -->
+</write>
+<write wiki>** caca **</write>
+
+<write html>
+  <a href="test.com">COOL</a>
+</write>
+
+ceci est du texte AGAT les balises HTML ne sont pas pris en compte
+</call-layout>
+
+<call-layout with="right_top">
+  Error page!
+<!--   <variable called="error_mesg"/> -->
+</call-layout>
+
+<!-- all the section of the website -->
+<section called="homepage">
+  <!-- right layout only for the homepage -->
+  <call-layout with="left">
+    homepage left
+  </call-layout>
+  <call-layout with="right_top">
+    <write wiki>
+      **fdfds** **fdsfd**
+
+      **fdfd**
+      !@#dfd@
+      <sub>texte dans sub **je met en gras dans sub** totto</sub>
+
+      ====== Introduction ======
+
+      salut tout le monde
+
+      <del>
+	**Welcome** __to the__ //Homepage//
+	<sup>__//**Caner**//__</sup><sup>fsdfd</sup>
+      </del>
+    </write>
+  </call-layout>
+</section>
+
+<section called="contact">
+  <!-- right layout only for contact -->
+  <call-layout with="right_top">
+    Contact page
+  </call-layout>
+</section>

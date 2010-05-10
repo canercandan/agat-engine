@@ -1,0 +1,122 @@
+<div id="newsError">&nbsp;</div>
+<div id="edit_news" style="display: none"></div>
+<div id="add_news" style="display: none">
+	<table id="imgFromManagement">
+		<tr>
+			<td>
+				<form name="newArticleForm" method="POST" action="" enctype="multipart/form-data">
+				<div id="addForm">
+					<input type="hidden" name="news_id" value="">
+					<input type="hidden" name="news_text" value="">
+					<input type="hidden" name="sav_type" value="add_news">
+					<table class="newsTbl">
+						<tr>
+							<td><h2>Ajouter un nouvel article</h2></td>
+						</tr>
+						<tr>
+							<td>
+								<table>
+									<tr>
+										<td><strong>Titre : </strong></td>
+										<td><input type="text" name="news_title"></td>
+										<td>&nbsp;</td>
+									</tr>	
+									<tr>
+										<td><strong>Date (<em>jour | mois | ann&eacute;e</em>) : </strong></td>
+										<td><input type="text" name="news_day" class="news_date">&nbsp;
+											<input type="text" name="news_month" class="news_date">&nbsp;
+											<input type="text" name="news_year" class="news_year"></td>
+										<td><input type="checkbox" name="ck_news_date"> Ne pas afficher la date.</td>
+									</tr>
+									<tr>
+										<td><strong>Auteur de l'article : </strong></td>
+										<td><input type="text" name="news_author"></td>
+										<td><input type="checkbox" name="ck_news_author"> Ne pas afficher l'auteur.</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<table>
+									<tr>
+										<td><strong>Image de l'article</strong></td>
+									</tr>
+									<tr>
+										<td><input type="checkbox" name="ck_image" checked onChange="Javascript: setNewsImgOptions();"> Ne pas afficher d'image.</td>
+									</tr>
+									<tr>
+										<td><input type="file" name="new_image" onChange="Javascript: ckNewsImgExtension(this.value);"></td>
+									</tr>
+									<tr>
+										<td>
+											<table>
+												<tr>
+													<td><strong>Titre de l'image : </strong></td>
+													<td><input type="text" name="img_title" disabled="true"></td>
+												</tr>	
+												<tr>
+													<td><strong>Description de l'image: </strong></td>
+													<td><textarea disabled="true" name="img_description"></textarea></td>
+												</tr>	
+											</table>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<table>
+												<tr>
+													<td><strong>Affichage taille r&eacute;el</strong></td>
+													<td><input type="checkbox" name="real_size" disabled="true" checked onChange="Javascript: setNewsScaleOptions('newArticleForm');"></td>
+												</tr>
+												<tr>
+													<td><strong>Conserver les proportions</strong></td>
+													<td><input type="checkbox" name="proportions" disabled="true" checked onChange="Javascript: setNewsScaleOptions('newArticleForm');"></td>
+												</tr>
+											</table>
+											<table class="proportionTbls">
+												<tr>
+													<td><strong>Largeur de l'image</strong></td>
+													<td>
+														<input type="text" name="new_width" onChange="Javascript: newsOnlyInt(this.name, 'newArticleForm');" disabled="true">
+													</td>
+													<td>
+														<select name="new_width_unit" disabled="true"><option selected>px</option><option>%</option></select>
+													</td>
+												</tr>
+												<tr>
+													<td><strong>Hauteur de l'image</strong></td>
+													<td>
+														<input type="text" name="new_height" onChange="Javascript: newsOnlyInt(this.name, 'newArticleForm');" disabled="true">
+													</td>
+													<td>
+														<select name="new_height_unit" disabled="true"><option selected>px</option><option>%</option></select>
+													</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+					</table>
+					
+				</div>
+			</td>
+			<td valign="top">
+				<h2>&nbsp;</h2>
+				<table>
+					<tr>
+						<td><strong>Texte de l'article</strong></td>
+					</tr><tr>
+						<td><textarea id="new_article_text" name="new_article_text" rows="5" cols="40" style="400"></textarea></td>
+					</tr>
+				</table>
+				<br/><br/><br/>
+				<input class="inputButton" type="button" value="Enregistrer" onClick="Javascript: checkNewsForm();"/>
+				<input class="inputButton" type="button" value="Annuler" onClick="Javascript: editContent(false, '', 'images'); showClass('divStreaming', true);"/><br>
+				</form>
+			</td>
+		</tr>
+	</table>
+</div>

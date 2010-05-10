@@ -1,0 +1,16 @@
+/* User structure generated for the website @toUpperString(getEnv("siteDomain"))@ */
+create table	articles
+(
+ id		integer	primary key	,
+ news_group   int,
+ news_date  date,
+ title      text,
+ author     text,
+ src        text,
+ img_title  text,
+ img_width  text,
+ img_height text,
+ text       text
+);
+
+insert into groups (news_group, news_date, title, author, src, img_title, img_width, img_height, text) values (1, "0000-00-00", "test", "-1", "-1", "-1", "-1", "-1", "<p>test</p>");

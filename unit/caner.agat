@@ -1,0 +1,80 @@
+<header caner.escienta.com apache13 91.121.151.238 80 admin admin/>
+
+<write css>
+  body{background-color: #eee}
+  div{background-color: white}
+</write>
+
+<layout main>
+  <write css>
+    border: 1px solid green;
+    height: 400px;
+    margin: 10px auto;
+    width: 640px;
+  </write>
+  <horizontal top>
+    <vertical left>
+      <write css>
+	border-right: 1px dashed green;
+	height: 380px;
+	width: 200px;
+      </write>
+      <horizontal slogan>
+	<write css>
+	  padding: 10px;
+	</write>
+      </horizontal>
+      <horizontal menu>
+	<write css>
+	  padding: 10px;
+	</write>
+      </horizontal>
+    </vertical>
+    <vertical right>
+      <write css>
+	padding: 10px;
+	width: 410px;
+      </write>
+    </vertical>
+  </horizontal>
+  <horizontal bottom>
+    <write css>
+      border-top: 1px dashed green;
+      text-align: center;
+    </write>
+  </horizontal>
+</layout>
+
+<call-layout slogan>
+  <write>====== Caner HomePage! ======</write>
+</call-layout>
+
+<call-layout menu>
+  <write>
+**Navigation**
+
+\\
+[[section:index]]
+
+
+  </write>
+</call-layout>
+
+<call-layout bottom>
+  <write>''Copyright 2009 Caner Candan''</write>
+</call-layout>
+
+<section index "Caner homepage">
+  <call-layout right>
+    <write>
+===== Presentation =====
+Bienvenue sur mon site personnel.
+==== Mon nom ====
+Mon nom c'est Caner Candan. Ne lisez pas cela Kanere car c'est faux. Dite plutot Djanere.
+==== Ma profession ====
+Je suis chef de projet dans un domaine qui m'interresse pas vraiment c'est pourquoi je souhaite continuer mes etudes et trouver ma vocation.
+=== Ma vocation ===
+Je souhaite devenir un developpeur de programme a part entiere dans un centre de R&D, le developpement en enbarquee m'interresse beaucoup.
+    </write>
+  </call-layout>
+</section>

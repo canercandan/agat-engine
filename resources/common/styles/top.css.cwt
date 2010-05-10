@@ -1,0 +1,9 @@
+/* Top CSS generated for the website @toUpperString(getEnv("siteDomain"))@ */
+<%
+foreach var in this.agat.block.body
+{
+  if (var.type != "CSS")
+    continue;
+  @@var@@
+}
+%>

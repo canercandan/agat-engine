@@ -1,0 +1,151 @@
+<header domain="doc.escienta.com"
+	web="apache13" host="91.121.151.238"
+	default_username="admin" default_password="admin"/>
+
+<forum type="MyBB"/>
+
+<write css>
+  body{background-color: #eee}
+  div{background-color: white}
+</write>
+
+<include path="layout_doc.agat"/>
+<!-- <include path="layout_doc2.agat"/> -->
+
+<call-layout with="top">
+  <write wiki>
+<!--     **$name2** --> [[section:index]] - [[section:header]] - [[section:layout]] - 
+    [[section:section]] - [[section:wiki]] - [[section:css]] - 
+    [[section:html]] - [[section:php]]
+  </write>
+</call-layout>
+
+<!-- <call-layout with="bottom"> -->
+<call-layout bottom>
+  <write wiki>
+    <del>Copyright</del> 2009 Caner Candan <!-- $copyright -->
+  </write>
+  <!--   <php> -->
+  <!--     $a = 4353 * 42353; -->
+  <!--     echo "<br/>" . $a . "<br/>"; -->
+  <!--   </php> -->
+  <!--   <variable called="copyright"/> -->
+  <!--   <variable copyright/> -->
+</call-layout>
+
+<!-- <template called="text"> -->
+<template text>
+  <write wiki>I am a **template**.</write>
+  <write html><a href="test.html">test</a><br/></write>
+</template>
+
+<!-- <section called="index" title="Agat presentation"> -->
+<section index "Agat presentation">
+  <call-layout with="title">Agat documentation</call-layout>
+  <call-layout with="middle">
+    <call-template text/>
+    <!--     <variable called="lang"/> -->
+    <write wiki>
+===== Introduction pour $name =====
+Agat $name2 est un langage qui sera se faire adopter par les plus grand genie du Web.
+En effet il permet de developper $name un site web facilement, rapidement et de facon structurer.
+
+\\
+==== Facilite et Rapidite ====
+Celui qui sera adopter Agat, sera aussi que developer un site web vitrine ou dynamique est
+tres rapide. Le langage fournit une syntaxe tres complete permettant de repondre a la
+demande des webmasters et du marche.
+
+\\
+==== Structure ====
+Agat est langage qui se dit structure car il suit un ensemble d'etapes pour la creation
+d'un site web ... **[[section:header]]**, **[[section:layout]]** et **[[section:section]]**
+
+\\
+==== Compile ====
+Apres avoir developpe son site web en Agat il faut utiliser le compilateur **Agat Engine**
+pour generer du code comprehensible par les acteurs du web.
+
+\\
+Je vous invite a consulter les autres pages pour plus de details sur le langage Agat
+
+
+{{images/test/hello.png?100}}
+    </write>
+  </call-layout>
+</section>
+
+<section called="header" title="Header">
+  <call-layout with="title">Header</call-layout>
+  <call-layout with="middle">
+    <write lang="javascript">
+===== Exemple =====
+<code><header domain="doc.agat.com" web="apache"/></code>
+  * **domain**: Il s'agit du nom de domaine du site web que l'on souhaite generer avec Agat
+  * web: Le server web utilise par le site
+
+===== Le domaine =====
+Cette donnee est tres important car le moteur Agat ne se limite pas que a la generation du 
+contenu du site web. En effet il genere egalement tous les dependances necessaire a son 
+integration sur la toile:
+
+\\
+  - configuration du server web
+  - configuration d'une nom de domaine du site
+  - copie des differents fichiers utilises par le site (images, ...)
+  - etc...
+
+===== Le server web =====
+Il est possible pour le moment d'integrer son site web sur une application Apache ou IIS. 
+D'autres vont suivre prochainement leur deploiment sur Agat comme Lighttpd, ...
+
+    </write>
+  </call-layout>
+</section>
+
+<section called="layout" title="Layout">
+  <call-layout with="title">Layout</call-layout>
+  <call-layout with="middle">
+    <write wiki>
+===== Exemple =====
+<code>
+<layout width="640px">
+  <horizontal called="top" height="3%"/>
+  <horizontal called="title" height="3%"/>
+  <horizontal called="middle" height="85%"/>
+  <horizontal called="bottom" height="3%"/>
+</layout>
+</code>
+  * layout: Il s'agit de la balise principale utilise pour definir la mise en page du site web
+  * horizontal: Par cette balise nous definissons dans la mise en page une zone horizontale dans le site
+  * vertical: Meme chose mais pour une zone verticale
+    </write>
+  </call-layout>
+</section>
+
+<section called="section" title="Section page">
+  <call-layout with="title">Section page</call-layout>
+  <call-layout with="middle">
+  </call-layout>
+</section>
+
+<section called="wiki" title="Wiki code">
+  <call-layout with="title">Wiki code</call-layout>
+</section>
+
+<section called="css" title="Css style">
+  <call-layout with="title">Css style</call-layout>
+</section>
+
+<section called="html" title="Html integration">
+  <call-layout with="title">Html integration</call-layout>
+</section>
+
+<section called="php" title="PHP">
+  <call-layout with="title">PHP HyperText Preprocessor</call-layout>
+  <call-layout with="middle">
+    <write lang="php">
+      phpinfo();
+    </write>
+  </call-layout>
+</section>
